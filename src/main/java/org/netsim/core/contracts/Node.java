@@ -1,17 +1,17 @@
 package org.netsim.core.contracts;
 
-import java.util.HashMap;
-import org.netsim.utils;
+import java.util.List;
 
 public interface Node {
-    public String getName();
-    public String getId();
-    public void sendMessageTo(String ipAddress, String message);
-    public Interface getInterfaceById(String id);
-    public HashMap<String, Interface> listInterfaces();
-    public ForwardingTable getForwardingTable();
-    public MessageHistory getMessageHistory();
-    public void receiveMessage(String message);
-    public void appendRoute(Link link);
-    public void removeRoute(Link link);
+    String getName();
+    String getId();
+    List<Interface> listInterfaces();
+    Interface getInterfaceById(String id);
+    void sendMessageTo(String destIp, String message);
+    void receiveMessage(String sourceIp, String message);
+    List<Port> listPorts();
+    Port getPortById(String id);
+    void buildNetworkLayer(Node node);
+    void buildDataLinkLayer(Node node);
+    void createInterface(String id, String ipAdd, String macAdd);
 }

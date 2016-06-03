@@ -4,7 +4,5 @@ import org.junit.Test;
 public class ConcreteNodeTest {
     @Test
     public void evaluatesExpression() {
-        ConcreteNode concreteNode = new ConcreteNode();
-        assertEquals(concreteNode.getInterfaces(), new )
     }
 }

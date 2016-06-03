@@ -1,35 +1,29 @@
 package org.netsim.core.lib;
 
-import org.netsim.core.contracts.Node;
+import org.netsim.core.contracts.StackStep;
+import org.netsim.core.contracts.Port;
 import org.netsim.core.contracts.Interface;
-import org.netsim.core.models.WirelessInterface;
-import org.netsim.core.models.WiredInterface;
+import org.netsim.core.models.WlanInterface;
+import org.netsim.core.models.EthernetInterface;
 
-public class InterfaceFactory 
-{
-    private static InterfaceFactory instance = null;
 
-    private InterfaceFactory() 
-    {
+public class InterfaceFactory extends AbstractFactory {
+
+    public InterfaceFactory(){}
+
+    public Interface getWlanInterface(String id, String ip, StackStep upperStep, StackStep lowerStep) {
+        return new WlanInterface(id, ip, upperStep, lowerStep);
     }
 
-    public InterfaceFactory getReference() 
-    {
-        if(instance == null)
-            instance = new InterfeceFactory();
-
-        return instance;
+    public Interface getEthInterface(String id, String ip, StackStep upperStep, StackStep lowerStep) {
+        return new EthernetInterface(id, ip, upperStep, lowerStep);
     }
 
-    public static Interface createWireless(Node node, String ipAdd
-        , String macAdd, int numConn) 
-    {
-        return new WirelessInterface(node, ipadd, macAdd, numConn);
+    public Port getWlanPort(String mac, StackStep upperStep, StackStep lowerStep) {
+        return null;
     }
 
-    public static Interface createWired(Node node, String ipAdd
-        , String macAdd)
-    {
-        return new WiredInterface(node, ipAdd, macAdd);
+    public Port getEthPort(String mac, StackStep upperStep, StackStep lowerStep) {
+        return null;
     }
 }
