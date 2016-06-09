@@ -1,54 +1,58 @@
 package org.netsim.core.models;
 
-import org.netsim.core.contracts.Interface;
+import org.netsim.core.contracts.PhysicalInterface;
+import org.netsim.core.contracts.NetworkInterface;
+import org.netsim.core.contracts.DataLinkInterface;
 import org.netsim.core.contracts.StackStep;
 import org.netsim.core.contracts.Pdu;
 
-public class WlanInterface implements Interface {
+public class WlanInterface extends PhysicalInterface {
     private String id;
-    private String ipAddress;
-    private StackStep port;
+    private NetworkInterface net;
+    private DataLinkInterface port;
     private StackStep upperStep;
     private StackStep lowerStep;
 
-    public WlanInterface(String id, String ip, StackStep upper, StackStep lower) {
+    public WlanInterface(String id, StackStep upper, StackStep lower) 
+    {
         this.id = id;
-        this.ipAddress = ipAddress;
         this.upperStep = upper;
         this.lowerStep = lower;
     }
 
-    public String getId() {
+    public String getId() 
+    {
         return this.id;
     }
 
-    public String getAddress() {
-        return this.ipAddress;
+    public String getIp() 
+    {
+        return this.net.getAddress();
     }
 
-    public StackStep getPort() {
-        return this.port;
+    public String getMac() 
+    {
+        return this.port.getAddress();
     }
 
-    public void setPort(StackStep port) {
-        this.port = port;
-    }
-
-    public void receivePayload(Pdu payload, StackStep previousStep) {
+    public void receivePayload(Pdu payload) 
+    {
         sendPayload(payload);
     }
 
-    private void sendPayload(Pdu payload) {
-        this.upperStep.receivePayload(payload, this);
+    private void sendPayload(Pdu payload) 
+    {
+        this.upperStep.receivePayload(payload);
     }
 
 
-    public void receivePdu(Pdu pdu, StackStep previousStep) {
+    public void receivePdu(Pdu pdu) 
+    {
         sendPdu(pdu);
     }
 
-    private void sendPdu(Pdu pdu) {
-        this.lowerStep.receivePdu(pdu, this);
+    private void sendPdu(Pdu pdu) 
+    {
+        this.lowerStep.receivePdu(pdu);
     }
-
 }

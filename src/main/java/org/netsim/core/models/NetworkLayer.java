@@ -1,53 +1,84 @@
 package org.netsim.core.models;
 
-import java.util.List;
+import java.util.ArrayList;
 
-import org.netsim.core.contracts.Interface;
+import org.netsim.core.contracts.PhysicalInterface;
+import org.netsim.core.contracts.PhysicalInterface;
 import org.netsim.core.contracts.ProtocolLayer;
 import org.netsim.core.contracts.Pdu;
-import org.netsim.core.contracts.Node;
+import org.netsim.core.contracts.AbstractNode;
+import org.netsim.core.contracts.StackStep;
+import org.netsim.core.contracts.Builder;
+import org.netsim.core.models.Packet;
 
-public class NetworkLayer {
-    private Node node;
+public class NetworkLayer implements ProtocolLayer {
+    private AbstractNode node;
     private StackStep upperStep;
     private StackStep lowerStep;
-    private List<Interface> interfaces;
+    private ArrayList<PhysicalInterface> interfaces;
 
     private NetworkLayer(NetworkLayerBuilder builder) {
         this.node = node;
-        this.upperStep = upperStep;
-        this.lowerStep = lowerStep;
-        this.interfaces.addAll(interfaces);
+        this.upperStep = builder.upperStep;
+        this.lowerStep = builder.lowerStep;
+        this.interfaces = builder.interfaces;
     }
 
-    public Node getNode() {
+    public AbstractNode getNode() {
         return this.node;
     }
 
-    public List<Interface> listInterfaces() {
+    public ArrayList<PhysicalInterface> listInterfaces() {
         return this.interfaces;
     }
 
-    public Interface getInterfaceById(String id) {
-        return interfaces.get(0);
+    public PhysicalInterface tableLookup(String ip)
+    {
+        // TODO: lookup logic
+        return this.interfaces.get(0);
     }
 
-    public static class NetworkLayerBuilder {
-        private final Node node;
+    public Pdu buildPdu(String src, String dest, Pdu message)
+    {
+        return new Packet.PacketBuilder(message, src, dest).build();
+    }
+
+    public void receivePdu(Pdu pdu)
+    {
+        return;
+    }
+
+    public void receivePayload(Pdu payload)
+    {
+        return;
+    }
+
+    public static class NetworkLayerBuilder implements Builder{
         private final StackStep upperStep;
         private final StackStep lowerStep;
-        private List<Interface> interfaces;
+        private final ArrayList<PhysicalInterface> interfaces;
 
-        public NetworkLayerBuilder(Node node, StackStep upper, StackStepp lower) {
-            this.node = node;
-            this.upperStep = upper;
-            this.lowerStep = lower;
-            this.interfaces = new List<Interface>();
+        public NetworkLayerBuilder(StackStep upperStep
+            , StackStep lowerStep, AbstractNode node) 
+        {
+           this.upperStep = upperStep;
+           this.lowerStep = lowerStep;
+           this.interfaces = new ArrayList<PhysicalInterface>();
         }
 
-        public NetworkLayer build() {
+        public NetworkLayer build()
+        {
             return new NetworkLayer(this);
         }
 
+        private void subscribeToInterfaces(ArrayList<PhysicalInterface> interfaces)
+        {
+            for(PhysicalInterface current : interfaces) 
+            {
+                //TODO: Subject interface is not implemented yet
+                this.interfaces.add(current);
+            }
+        }
     }
+
 }
