@@ -1,12 +1,14 @@
-apply plugin: 'java'
+
+plugins {
+    id 'java'
+}
 
 repositories {
     jcenter()
+    mavenCentral()
 }
 
-plugins {
-    id "com.github.samultbrown.cucumber" version "0.9"
-}
+
 
 sourceSets {
     main.java.srcDir 'src/main'
@@ -15,9 +17,21 @@ sourceSets {
 
 dependencies {
     compile 'org.slf4j:slf4j-api:1.7.21'
+    testCompile 'info.cukes:cucumber-java:1.2.4'
+    testCompile 'info.cukes:cucumber-junit:1.2.4'
     testCompile 'junit:junit:4.12'
 }
 
+test {
+    testLogging.showStandardStreams = true
+    systemProperties System.getProperties()
+    testLogging.events 'passed'
+}
+
+task unitTests(type: Test, dependsOn: testClasses) {
+    include '**/*Test.java'
+}
+
 jar {
-    manifest.attributes 'Main-Class': 'org.sumaq.netsim.Main'
+    manifest.attributes 'Main-Class': 'org.netsim.main.Main'
 }
