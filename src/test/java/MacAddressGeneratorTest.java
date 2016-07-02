@@ -1,4 +1,4 @@
-package org.netsim.core;
+package org.netsim.networking;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;

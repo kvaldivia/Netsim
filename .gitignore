@@ -4,3 +4,11 @@ tmp/
 uml/
 *.swo
 *.swp
+config/
+.classpath
+.project
+.settings/
+bin/
+*.iml
+.idea/
+dagger/

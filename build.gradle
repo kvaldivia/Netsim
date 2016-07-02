@@ -1,6 +1,7 @@
-
 plugins {
     id 'java'
+    id 'eclipse'
+    //id 'checkstyle'
 }
 
 repositories {
@@ -8,19 +9,52 @@ repositories {
     mavenCentral()
 }
 
-
-
 sourceSets {
     main.java.srcDir 'src/main'
     test.java.srcDir 'src/test'
+    dagger.java.srcDirs = ['src/dagger/java']
+}
+
+configurations {
+  compileDagger
+}
+
+compileJava {
+    description = "dagger annotation processor is loaded automatically from classpath"
+    sourceSets.dagger.java.srcDirs*.mkdirs()
+    classpath += configurations.compileDagger
+    options.compilerArgs += [
+        '-s', sourceSets.dagger.java.srcDirs.iterator().next()
+    ]
+}
+
+clean {
+  description = "delete files in generated source directory tree"
+  delete fileTree(dir: sourceSets.dagger.java.srcDirs.iterator().next())
 }
 
 dependencies {
+
+    ext.daggerVersion = '2.5'
+    //compile 'org.apache.commons:commons-collections4:4.1'
     compile 'org.slf4j:slf4j-api:1.7.21'
+    compile "com.google.dagger:dagger:${daggerVersion}"
+    compileDagger "com.google.dagger:dagger-compiler:${daggerVersion}"
     testCompile 'info.cukes:cucumber-java:1.2.4'
     testCompile 'info.cukes:cucumber-junit:1.2.4'
     testCompile 'junit:junit:4.12'
 }
+
+/*checkstyle {
+    toolVersion = '6.19'
+}*/
+
+/*tasks.withType(Checkstyle) {
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
+}*/
 
 test {
     testLogging.showStandardStreams = true
@@ -32,6 +66,11 @@ task unitTests(type: Test, dependsOn: testClasses) {
     include '**/*Test.java'
 }
 
+task compileXlint(type: JavaCompile) {
+    options.compilerArgs = ['-Xlint']
+}
+
 jar {
-    manifest.attributes 'Main-Class': 'org.netsim.main.Main'
+    //from configurations.compile.collect { zipTree it }
+    manifest.attributes 'Main-Class': 'org.netsim.main.Netsim'
 }
