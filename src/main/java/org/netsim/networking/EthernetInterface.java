@@ -6,18 +6,17 @@ import java.util.LinkedList;
 
 import javax.inject.Inject;
 
-import org.netsim.device.ADevice;
-
-public class EthernetInterface extends AHardwareInterface<IPacket,EthernetFrame> {
+public class EthernetInterface extends AHardwareInterface<EthernetFrame> {
   private String address;
   private HashMap<String,IProtocol<?extends IDataUnit,IPacket>> consumers;
   private LinkedList<EthernetFrame> outgoingQueue;
   private LinkedList<EthernetFrame> incomingQueue;
   private ADevice<IFrame> device;
-  private boolean isInterfaceUp;
-  private WiredLink link;
-  
+  private boolean up;
+  private WiredLink wiredLink;
   private Thread thread;
+
+  public final int MAX_HOSTS = 2;
 
   @Inject
   public EthernetInterface() {
@@ -26,8 +25,9 @@ public class EthernetInterface extends AHardwareInterface<IPacket,EthernetFrame>
     outgoingQueue = new LinkedList<>();
     incomingQueue = new LinkedList<>();
     device = null;
-    isInterfaceUp = true;
+    up = true;
     thread = null;
+    wiredLink = null;
   }
 
   public void setThread(Thread t) {
@@ -150,7 +150,7 @@ public class EthernetInterface extends AHardwareInterface<IPacket,EthernetFrame>
   }
 
   public void run() {
-    while (isInterfaceUp) {
+    while (this.up) {
       forward();
       process();
     }
@@ -169,11 +169,34 @@ public class EthernetInterface extends AHardwareInterface<IPacket,EthernetFrame>
   }
 
   @Override
-  public <HW extends AHardwareInterface<? extends IPacket, ? extends IFrame>> 
-  void setLink(ILink<? extends HW> ethLink) {
-    if (link == null) {
-      link = (WiredLink) ethLink;
+  public <I extends AHardwareInterface<EthernetFrame>> void setLink(ILink<I> link) {
+    // TODO Auto-generated method stub
+    if (wiredLink == null) {
+      wiredLink = (WiredLink) link;
     }
+  }
+
+  @Override
+  public ArrayList<AHardwareInterface<EthernetFrame>> getConnectedHosts() {
+    ArrayList<AHardwareInterface<EthernetFrame>> result = new ArrayList<>();
+
+    if (wiredLink != null) {
+      result.addAll(wiredLink.getHosts());
+    }
+    return result;
+  }
+
+  @Override
+  public boolean isUp() {
+    return up;
+  }
+
+  @Override
+  public boolean isLinkFull() {
+    boolean result = false;
+    if (wiredLink != null && wiredLink.isLinkFull())
+      result = true;
+    return result;
   }
 
 }

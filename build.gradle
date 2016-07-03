@@ -36,7 +36,7 @@ clean {
 dependencies {
 
     ext.daggerVersion = '2.5'
-    //compile 'org.apache.commons:commons-collections4:4.1'
+    compile 'org.apache.commons:commons-collections4:4.1'
     compile 'org.slf4j:slf4j-api:1.7.21'
     compile "com.google.dagger:dagger:${daggerVersion}"
     compileDagger "com.google.dagger:dagger-compiler:${daggerVersion}"
@@ -71,6 +71,6 @@ task compileXlint(type: JavaCompile) {
 }
 
 jar {
-    //from configurations.compile.collect { zipTree it }
+    from configurations.compile.collect { zipTree it }
     manifest.attributes 'Main-Class': 'org.netsim.main.Netsim'
 }

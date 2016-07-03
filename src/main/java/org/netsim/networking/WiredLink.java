@@ -2,11 +2,17 @@ package org.netsim.networking;
 
 import java.util.ArrayList;
 
-public class WiredLink implements ILink<EthernetInterface> {
-  private ArrayList<EthernetInterface> hosts;
+import javax.inject.Inject;
 
+import org.apache.commons.collections4.list.FixedSizeList;
+
+public class WiredLink implements ILink<EthernetInterface> {
+  private FixedSizeList<EthernetInterface> hosts;
+
+  @Inject
   public WiredLink() {
-    hosts = new ArrayList<>(2);
+    ArrayList<EthernetInterface> hostsList = new ArrayList<>(2);
+    hosts = FixedSizeList.fixedSizeList(hostsList);
   }
   
   public void connect(EthernetInterface host) {
@@ -28,6 +34,20 @@ public class WiredLink implements ILink<EthernetInterface> {
       }
       
     }
+  }
+
+  @Override
+  public ArrayList<EthernetInterface> getHosts() {
+    ArrayList<EthernetInterface> result = new ArrayList<>();
+    for (EthernetInterface eth: hosts) {
+      result.add(eth);
+    }
+    return result;
+  }
+
+  @Override
+  public boolean isLinkFull() {
+    return this.hosts.isFull();
   }
 
 }

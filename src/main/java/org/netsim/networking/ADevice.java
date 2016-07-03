@@ -1,12 +1,6 @@
-package org.netsim.device;
+package org.netsim.networking;
 
 import java.util.ArrayList;
-
-import org.netsim.networking.IDataUnit;
-import org.netsim.networking.IProtocol;
-import org.netsim.networking.AHardwareInterface;
-import org.netsim.networking.IFrame;
-import org.netsim.networking.IPacket;
 
 public abstract class ADevice<T extends IDataUnit> implements Runnable{
   public abstract <T1 extends T>
@@ -16,10 +10,13 @@ public abstract class ADevice<T extends IDataUnit> implements Runnable{
     void sendMessage(T1 msg, IProtocol<? extends IDataUnit, T1> thr);
 
   public abstract 
-    ArrayList<AHardwareInterface<?extends IPacket,?extends IFrame>> listInterfaces();
+    ArrayList<AHardwareInterface<?extends IFrame>> listInterfaces();
+
+  public abstract 
+    ArrayList<AHardwareInterface<?extends IFrame>> listWirelessInterfaces();
 
   public abstract
-    ArrayList<AHardwareInterface<?extends IPacket,?extends IFrame>> listConnected();
+    ArrayList<AHardwareInterface<?extends IFrame>> listConnected();
 
   public abstract void process();
 

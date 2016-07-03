@@ -1,7 +1,4 @@
-package org.netsim.device;
-
-import org.netsim.networking.EthernetInterface;
-import org.netsim.networking.WlanInterface;
+package org.netsim.networking;
 
 import dagger.Module;
 import dagger.Provides;

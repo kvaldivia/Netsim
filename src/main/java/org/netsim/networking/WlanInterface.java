@@ -1,18 +1,16 @@
 package org.netsim.networking;
 
-import org.netsim.device.ADevice;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
 import javax.inject.Inject;
 
-public class WlanInterface extends AHardwareInterface<IPacket,WlanFrame> {
+public class WlanInterface extends AHardwareInterface<WlanFrame> {
   private String address;
   private String gatewayAddress;
-  private boolean isUp;
-  //private WirelessLink wlanLink;
+  private boolean up;
+  public final int MAX_HOSTS = 10;
 
   private HashMap<String,IProtocol<? extends IDataUnit,IPacket>> consumers;
   private LinkedList<WlanFrame> incoming;
@@ -23,7 +21,6 @@ public class WlanInterface extends AHardwareInterface<IPacket,WlanFrame> {
 
   @Inject
   public WlanInterface() {
-    isUp = true;
     address = MacAddressGenerator.getInstance().newMacAddress();
     consumers = new HashMap<>();
     incoming = new LinkedList<>();
@@ -31,6 +28,7 @@ public class WlanInterface extends AHardwareInterface<IPacket,WlanFrame> {
     thread = null;
     gatewayAddress = null;
     wlanLink = null;
+    up = true;
   }
 
   public String getAddress() {
@@ -142,7 +140,7 @@ public class WlanInterface extends AHardwareInterface<IPacket,WlanFrame> {
   }
 
   public void run() {
-    while (isUp) {
+    while (this.up) {
       forward();
       process();
     }
@@ -178,11 +176,32 @@ public class WlanInterface extends AHardwareInterface<IPacket,WlanFrame> {
   }
 
   @Override
-  public <HW extends AHardwareInterface<? extends IPacket, ? extends IFrame>> 
-  void setLink(ILink<? extends HW> link) {
+  public <I extends AHardwareInterface<WlanFrame>> void setLink(ILink<I> link) {
     if (wlanLink == null) {
       wlanLink = (WirelessLink) link;
     }
   }
 
- }
+  @Override
+  public boolean isUp() {
+    return up;
+  }
+
+  @Override
+  public ArrayList<AHardwareInterface<WlanFrame>> getConnectedHosts() {
+    ArrayList<AHardwareInterface<WlanFrame>> result = new ArrayList<>();
+    if (wlanLink != null) {
+      result.addAll(wlanLink.getHosts());
+    }
+    return result;
+  }
+
+  @Override
+  public boolean isLinkFull() {
+    boolean result = false;
+    if (wlanLink != null && wlanLink.isLinkFull())
+      result = true;
+    return result;
+  }
+
+}
