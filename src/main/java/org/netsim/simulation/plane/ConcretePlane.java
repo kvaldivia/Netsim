@@ -6,14 +6,14 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.netsim.networking.hardware.AHardwareInterface;
+import org.netsim.networking.hardware.IHardwareInterface;
 import org.netsim.networking.hardware.ILink;
 import org.netsim.networking.protocol.IFrame;
 import org.netsim.simulation.SimulationComponent;
 import org.netsim.simulation.node.INode;
 
 public class ConcretePlane implements IPlane {
-  private ArrayList<ILink<? extends AHardwareInterface<? extends IFrame>>> links;
+  private ArrayList<ILink<? extends IHardwareInterface<? extends IFrame>>> links;
   private HashMap<String, INode> nodes;
   private SimulationComponent simComponent;
 
@@ -25,13 +25,13 @@ public class ConcretePlane implements IPlane {
   }
 
   @Override
-  public <HW extends AHardwareInterface<IFrame>> 
+  public <HW extends IHardwareInterface<IFrame>> 
   void createLink(HW eth0, HW eth1) {
 
   }
 
   @Override
-  public ArrayList<ILink<? extends AHardwareInterface<? extends IFrame>>> listLinks() {
+  public ArrayList<ILink<? extends IHardwareInterface<? extends IFrame>>> listLinks() {
     // TODO Auto-generated method stub
     return null;
   }

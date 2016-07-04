@@ -5,36 +5,36 @@ import java.util.HashMap;
 
 import javax.inject.Inject;
 
-import org.netsim.networking.device.ADevice;
-import org.netsim.networking.hardware.AHardwareInterface;
+import org.netsim.networking.device.IDevice;
+import org.netsim.networking.hardware.IHardwareInterface;
 import org.netsim.networking.protocol.IDataUnit;
 import org.netsim.networking.protocol.IFrame;
 
 public class StandingNode implements INode {
-  private HashMap<AHardwareInterface<? extends IFrame>, Double> coverageDistances;
+  private HashMap<IHardwareInterface<? extends IFrame>, Double> coverageDistances;
   private Point point;
-  private ADevice<? extends IDataUnit> device;
+  private IDevice<? extends IDataUnit> device;
 
 
   @Inject
-  public StandingNode(ADevice<? extends IDataUnit> dev) {
+  public StandingNode(IDevice<? extends IDataUnit> dev) {
     device = dev;
     point = null;
     coverageDistances = new HashMap<>();
-    for (AHardwareInterface<? extends IFrame> iface: dev.listInterfaces()) {
-      coverageDistances.put(iface, iface.DOUBLE_COVERAGE_DISTANCE);
+    for (IHardwareInterface<? extends IFrame> iface: dev.listInterfaces()) {
+      coverageDistances.put(iface, iface.getCoverageDistance());
     }
   }
 
   @Override
-  public HashMap<AHardwareInterface<? extends IFrame>, Double> getCoverageDistances() {
-    HashMap<AHardwareInterface<? extends IFrame>, Double> results;
+  public HashMap<IHardwareInterface<? extends IFrame>, Double> getCoverageDistances() {
+    HashMap<IHardwareInterface<? extends IFrame>, Double> results;
     results = new HashMap<>();
     return results;
   }
 
   @Override
-  public ADevice<? extends IDataUnit> getDevice() {
+  public IDevice<? extends IDataUnit> getDevice() {
     return device;
   }
 

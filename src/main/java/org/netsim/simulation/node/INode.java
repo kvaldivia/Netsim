@@ -3,8 +3,8 @@ package org.netsim.simulation.node;
 import java.awt.Point;
 import java.util.HashMap;
 
-import org.netsim.networking.device.ADevice;
-import org.netsim.networking.hardware.AHardwareInterface;
+import org.netsim.networking.device.IDevice;
+import org.netsim.networking.hardware.IHardwareInterface;
 import org.netsim.networking.protocol.IDataUnit;
 import org.netsim.networking.protocol.IFrame;
 
@@ -13,9 +13,9 @@ public interface INode {
 
   Point getPoint();
 
-  ADevice<? extends IDataUnit> getDevice();
+  IDevice<? extends IDataUnit> getDevice();
 
   void setPoint(Point p);
 
-  HashMap<AHardwareInterface<? extends IFrame>, Double> getCoverageDistances();
+  HashMap<IHardwareInterface<? extends IFrame>, Double> getCoverageDistances();
 }

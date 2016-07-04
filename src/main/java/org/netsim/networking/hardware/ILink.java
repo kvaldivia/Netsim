@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.netsim.networking.protocol.IFrame;
 
-public interface ILink <HW extends AHardwareInterface<?extends IFrame>>{
+public interface ILink <HW extends IHardwareInterface<?extends IFrame>>{
 
   void connect(HW gway);
 

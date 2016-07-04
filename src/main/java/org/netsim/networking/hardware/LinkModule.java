@@ -9,19 +9,19 @@ import dagger.Provides;
 public class LinkModule {
   private WlanInterface gateway;
 
-  public <GW extends AHardwareInterface<? extends IFrame>>
+  public <GW extends IHardwareInterface<? extends IFrame>>
   void setGateway(GW wlan) {
     gateway = (WlanInterface) wlan;
   }
 
   @Provides
-  public ILink<? extends AHardwareInterface<? extends IFrame>> 
+  public ILink<? extends IHardwareInterface<? extends IFrame>> 
   provideWiredLink(WiredLink wired) {
     return wired;
   }
 
   @Provides
-  public ILink<? extends AHardwareInterface<? extends IFrame>> 
+  public ILink<? extends IHardwareInterface<? extends IFrame>> 
   provideWirelessLink() {
     return new WirelessLink(gateway);
   }

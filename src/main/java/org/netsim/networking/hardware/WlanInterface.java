@@ -6,14 +6,14 @@ import java.util.LinkedList;
 
 import javax.inject.Inject;
 
-import org.netsim.networking.device.ADevice;
+import org.netsim.networking.device.IDevice;
 import org.netsim.networking.protocol.IDataUnit;
 import org.netsim.networking.protocol.IFrame;
 import org.netsim.networking.protocol.IPacket;
 import org.netsim.networking.protocol.IProtocol;
 import org.netsim.networking.protocol.WlanFrame;
 
-public class WlanInterface extends AHardwareInterface<WlanFrame> {
+public class WlanInterface extends IHardwareInterface<WlanFrame> {
   private String address;
   private String gatewayAddress;
   private boolean up;
@@ -21,12 +21,12 @@ public class WlanInterface extends AHardwareInterface<WlanFrame> {
   private HashMap<String,IProtocol<? extends IDataUnit,IPacket>> consumers;
   private LinkedList<WlanFrame> incoming;
   private LinkedList<WlanFrame> outgoing;
-  private ADevice<IFrame> device;
+  private IDevice<IFrame> device;
   private Thread thread;
   private WirelessLink wlanLink;
 
-  public final double DOUBLE_COVERAGE_DISTANCE;
-  public final int INT_MAX_HOSTS;
+  private final int INT_MAX_HOSTS;
+  private final double DOUBLE_COVERAGE_DISTANCE;
 
   @Inject
   public WlanInterface() {
@@ -193,21 +193,21 @@ public class WlanInterface extends AHardwareInterface<WlanFrame> {
   }
 
   @Override
-  public void setDevice(ADevice<IFrame> dev) {
+  public void setDevice(IDevice<IFrame> dev) {
     if(device == null) {
       device = dev;
     }
   }
 
   @Override
-  public <I extends AHardwareInterface<WlanFrame>> void setLink(ILink<I> link) {
+  public <I extends IHardwareInterface<WlanFrame>> void setLink(ILink<I> link) {
     if (wlanLink == null) {
       wlanLink = (WirelessLink) link;
     }
   }
 
   @Override
-  public ILink<? extends AHardwareInterface<WlanFrame>> getLink() {
+  public ILink<? extends IHardwareInterface<WlanFrame>> getLink() {
     return wlanLink;
   }
 
@@ -217,8 +217,8 @@ public class WlanInterface extends AHardwareInterface<WlanFrame> {
   }
 
   @Override
-  public ArrayList<AHardwareInterface<WlanFrame>> getConnectedHosts() {
-    ArrayList<AHardwareInterface<WlanFrame>> result = new ArrayList<>();
+  public ArrayList<IHardwareInterface<WlanFrame>> getConnectedHosts() {
+    ArrayList<IHardwareInterface<WlanFrame>> result = new ArrayList<>();
     if (wlanLink != null) {
       result.addAll(wlanLink.getHosts());
     }
@@ -231,6 +231,18 @@ public class WlanInterface extends AHardwareInterface<WlanFrame> {
     if (wlanLink != null && wlanLink.isLinkFull())
       result = true;
     return result;
+  }
+
+  @Override
+  public double getCoverageDistance() {
+    // TODO Auto-generated method stub
+    return DOUBLE_COVERAGE_DISTANCE;
+  }
+
+  @Override
+  public int getMaxHosts() {
+    // TODO Auto-generated method stub
+    return INT_MAX_HOSTS;
   }
 
 }

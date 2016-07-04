@@ -2,8 +2,8 @@ package netsim;
 
 import java.util.ArrayList;
 
-import org.netsim.networking.device.ADevice;
-import org.netsim.networking.hardware.AHardwareInterface;
+import org.netsim.networking.device.IDevice;
+import org.netsim.networking.hardware.IHardwareInterface;
 import org.netsim.networking.protocol.IDataUnit;
 import org.netsim.networking.protocol.IFrame;
 import org.netsim.simulation.DaggerPlaneComponent;
@@ -28,14 +28,14 @@ public class Stepdefs {
   private IPlane plane = planeComponent.provideConcretePlane();
   
   private ArrayList<INode> nodes;
-  private AHardwareInterface<? extends IFrame> currentInterface;
-  private ADevice<? extends IDataUnit> dev;
+  private IHardwareInterface<? extends IFrame> currentInterface;
+  private IDevice<? extends IDataUnit> dev;
   
   @Given("^An access point has at least one wlan interface working\\.$")
   public void an_access_point_has_at_least_one_wlan_interface_working() throws Throwable {
     plane.createAccessPoint();
     nodes = new ArrayList<>(plane.listNodes().values());
-    ArrayList<AHardwareInterface<? extends IFrame>> interfaces; 
+    ArrayList<IHardwareInterface<? extends IFrame>> interfaces; 
     interfaces = new ArrayList<>();
 
     for (INode node: nodes) {
@@ -43,7 +43,7 @@ public class Stepdefs {
       interfaces.addAll(dev.listWirelessInterfaces());
     }
 
-    for (AHardwareInterface<? extends IFrame> wlan: interfaces) {
+    for (IHardwareInterface<? extends IFrame> wlan: interfaces) {
       if (wlan.isUp()) {
         currentInterface = wlan;
         return;

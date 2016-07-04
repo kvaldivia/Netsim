@@ -14,7 +14,7 @@ public class WirelessLink implements ILink<WlanInterface> {
 
   @Inject
   public WirelessLink(WlanInterface gway) {
-    ArrayList<WlanInterface> hostsList = new ArrayList<WlanInterface>(gway.INT_MAX_HOSTS);
+    ArrayList<WlanInterface> hostsList = new ArrayList<WlanInterface>(gway.getMaxHosts());
     hosts = FixedSizeList.fixedSizeList(hostsList);
     gateway = gway;
     hosts.add(gway);

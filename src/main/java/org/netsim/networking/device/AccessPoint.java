@@ -9,7 +9,9 @@ import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
 
-import org.netsim.networking.hardware.AHardwareInterface;
+import org.netsim.networking.hardware.EthernetInterface;
+import org.netsim.networking.hardware.IHardwareInterface;
+import org.netsim.networking.hardware.WlanInterface;
 import org.netsim.networking.protocol.IDataUnit;
 import org.netsim.networking.protocol.IFrame;
 import org.netsim.networking.protocol.IProtocol;
@@ -17,8 +19,8 @@ import org.netsim.networking.protocol.IProtocol;
 // TODO: The access point doesn't need to know about the content of the
 // IFrame to send it out. The nature of the radio waves makes the WirelessLink
 // object implement a broadcast mechanism.
-public class AccessPoint extends ADevice<IFrame> {
-  private LinkedHashMap<String,AHardwareInterface<? extends IFrame>> interfaces;
+public class AccessPoint implements IDevice<IFrame> {
+  private LinkedHashMap<String,IHardwareInterface<? extends IFrame>> interfaces;
   private LinkedList<IFrame> outgoingQueue;
 
   private int wlanCounter;
@@ -43,14 +45,16 @@ public class AccessPoint extends ADevice<IFrame> {
     executor  = Executors.newFixedThreadPool(INT_NUM_THREADS);
   }
 
-  public void addEthernetInterface(AHardwareInterface<?extends IFrame> eth) {
+  @Override
+  public void addEthernetInterface(EthernetInterface eth) {
     String id = "eth" + ethCounter;
     this.interfaces.put(id, eth);
     eth.setDevice(this);
     ethCounter++;
   }
 
-  public void addWlanInterface(AHardwareInterface<?extends IFrame> wlan) {
+  @Override
+  public void addWlanInterface(WlanInterface wlan) {
     String id = "wlan" + wlanCounter;
     this.interfaces.put(id, wlan);
     wlan.setDevice(this);
@@ -78,14 +82,14 @@ public class AccessPoint extends ADevice<IFrame> {
     String dest = msg.getDestinationAddress();
     String prot = msg.getProtocol();
 
-    for (AHardwareInterface<? extends IFrame> hwInterface
+    for (IHardwareInterface<? extends IFrame> hwInterface
          : interfaces.values()) {
       hwInterface.send(msg.getPayload(), src, dest, prot);
     } 
   }
 
   public void run() {
-    for (AHardwareInterface<? extends IFrame> iface: interfaces.values()) {
+    for (IHardwareInterface<? extends IFrame> iface: interfaces.values()) {
       executor.execute(iface);
     }
     while (deviceIsOn) {
@@ -112,29 +116,29 @@ public class AccessPoint extends ADevice<IFrame> {
   }
 
   @Override
-  public ArrayList<AHardwareInterface<? extends IFrame>> listInterfaces() {
-    ArrayList<AHardwareInterface<? extends IFrame>> result;
+  public ArrayList<IHardwareInterface<? extends IFrame>> listInterfaces() {
+    ArrayList<IHardwareInterface<? extends IFrame>> result;
     result = new ArrayList<>(interfaces.values());
     return result;
   }
 
   @Override
-  public ArrayList<AHardwareInterface<? extends IFrame>> listConnected() {
-    ArrayList<AHardwareInterface<? extends IFrame>> connected;
+  public ArrayList<IHardwareInterface<? extends IFrame>> listConnected() {
+    ArrayList<IHardwareInterface<? extends IFrame>> connected;
     connected = new ArrayList<>();
-    for (AHardwareInterface<? extends IFrame> iface: interfaces.values()) {
+    for (IHardwareInterface<? extends IFrame> iface: interfaces.values()) {
       connected.addAll(iface.getConnectedHosts());
     }
     return connected;
   }
 
   @Override
-  public ArrayList<AHardwareInterface<? extends IFrame>> 
+  public ArrayList<IHardwareInterface<? extends IFrame>> 
   listWirelessInterfaces() {
-    ArrayList<AHardwareInterface<? extends IFrame>> wlanList 
+    ArrayList<IHardwareInterface<? extends IFrame>> wlanList 
       = new ArrayList<>();
 
-    for (Map.Entry<String,AHardwareInterface<? extends IFrame>> wlan
+    for (Map.Entry<String,IHardwareInterface<? extends IFrame>> wlan
          : interfaces.entrySet()) {
 
       if (wlan.getKey().contains("wlan")) {

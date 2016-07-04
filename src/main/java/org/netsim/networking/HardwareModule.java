@@ -2,7 +2,7 @@ package org.netsim.networking;
 
 import javax.inject.Named;
 
-import org.netsim.networking.hardware.AHardwareInterface;
+import org.netsim.networking.hardware.IHardwareInterface;
 import org.netsim.networking.hardware.EthernetInterface;
 import org.netsim.networking.hardware.ILink;
 import org.netsim.networking.hardware.WiredLink;
@@ -17,26 +17,26 @@ import dagger.Provides;
 public class HardwareModule {
   @Provides
   @Named("ethernet")
-  AHardwareInterface<? extends IFrame> provideEthernetInterface(EthernetInterface eface) {
+  IHardwareInterface<? extends IFrame> provideEthernetInterface(EthernetInterface eface) {
     return eface;
   }
 
   @Provides
   @Named("wireless")
-  AHardwareInterface<? extends IFrame> provideWlanInterface(WlanInterface wface) {
+  IHardwareInterface<? extends IFrame> provideWlanInterface(WlanInterface wface) {
     return wface;
   }
 
   @Provides
   @Named("wired")
-  public ILink<? extends AHardwareInterface<? extends IFrame>> 
+  public ILink<? extends IHardwareInterface<? extends IFrame>> 
     provideWiredLink(WiredLink wired) {
     return wired;
   }
 
   @Provides
   @Named("wireless")
-  public ILink<? extends AHardwareInterface<? extends IFrame>> 
+  public ILink<? extends IHardwareInterface<? extends IFrame>> 
     provideWirelessLink(WirelessLink wireless) {
     return wireless;
   }

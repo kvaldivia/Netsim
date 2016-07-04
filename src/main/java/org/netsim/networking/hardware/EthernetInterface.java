@@ -6,25 +6,25 @@ import java.util.LinkedList;
 
 import javax.inject.Inject;
 
-import org.netsim.networking.device.ADevice;
+import org.netsim.networking.device.IDevice;
 import org.netsim.networking.protocol.EthernetFrame;
 import org.netsim.networking.protocol.IDataUnit;
 import org.netsim.networking.protocol.IFrame;
 import org.netsim.networking.protocol.IPacket;
 import org.netsim.networking.protocol.IProtocol;
 
-public class EthernetInterface extends AHardwareInterface<EthernetFrame> {
+public class EthernetInterface extends IHardwareInterface<EthernetFrame> {
   private String address;
   private HashMap<String,IProtocol<?extends IDataUnit,IPacket>> consumers;
   private LinkedList<EthernetFrame> outgoingQueue;
   private LinkedList<EthernetFrame> incomingQueue;
-  private ADevice<IFrame> device;
+  private IDevice<IFrame> device;
   private boolean up;
   private WiredLink wiredLink;
   private Thread thread;
 
   public final double DOUBLE_COVERAGE_DISTANCE = 0;
-  public final double INT_MAX_HOSTS = 2;
+  public final int INT_MAX_HOSTS = 2;
 
   @Inject
   public EthernetInterface() {
@@ -173,14 +173,14 @@ public class EthernetInterface extends AHardwareInterface<EthernetFrame> {
   }
 
   @Override
-  public void setDevice(ADevice<IFrame> dev) {
+  public void setDevice(IDevice<IFrame> dev) {
     if (device == null) {
       device = dev;
     }
   }
 
   @Override
-  public <I extends AHardwareInterface<EthernetFrame>> void setLink(ILink<I> link) {
+  public <I extends IHardwareInterface<EthernetFrame>> void setLink(ILink<I> link) {
     // TODO Auto-generated method stub
     if (wiredLink == null) {
       wiredLink = (WiredLink) link;
@@ -188,8 +188,8 @@ public class EthernetInterface extends AHardwareInterface<EthernetFrame> {
   }
 
   @Override
-  public ArrayList<AHardwareInterface<EthernetFrame>> getConnectedHosts() {
-    ArrayList<AHardwareInterface<EthernetFrame>> result = new ArrayList<>();
+  public ArrayList<IHardwareInterface<EthernetFrame>> getConnectedHosts() {
+    ArrayList<IHardwareInterface<EthernetFrame>> result = new ArrayList<>();
 
     if (wiredLink != null) {
       result.addAll(wiredLink.getHosts());
@@ -211,7 +211,17 @@ public class EthernetInterface extends AHardwareInterface<EthernetFrame> {
   }
 
   @Override
-  public ILink<? extends AHardwareInterface<EthernetFrame>> getLink() {
+  public ILink<? extends IHardwareInterface<EthernetFrame>> getLink() {
     return wiredLink;
+  }
+
+  @Override
+  public double getCoverageDistance() {
+    return DOUBLE_COVERAGE_DISTANCE;
+  }
+
+  @Override
+  public int getMaxHosts() {
+    return INT_MAX_HOSTS;
   }
 }
