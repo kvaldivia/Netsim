@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.netsim.networking.device.ADevice;
 import org.netsim.networking.protocol.IDataUnit;
 import org.netsim.networking.protocol.IFrame;
-import org.netsim.networking.protocol.ILink;
 import org.netsim.networking.protocol.IPacket;
 import org.netsim.networking.protocol.IProtocol;
 
@@ -46,4 +45,6 @@ public abstract class AHardwareInterface<T2 extends IFrame>
   public abstract boolean isUp();
 
   public abstract boolean isLinkFull();
+
+  public abstract ILink<? extends AHardwareInterface<T2>> getLink();
 }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
 
@@ -23,7 +25,10 @@ public class AccessPoint extends ADevice<IFrame> {
   private int ethCounter;
   private boolean deviceIsOn;
 
+  private static final int INT_NUM_THREADS = 10;
+
   private Thread thread;
+  private ExecutorService executor;
 
   @Inject
   public AccessPoint() {
@@ -35,6 +40,7 @@ public class AccessPoint extends ADevice<IFrame> {
     ethCounter = 0;
     interfaces = new LinkedHashMap<>(2);
     outgoingQueue = new LinkedList<>();
+    executor  = Executors.newFixedThreadPool(INT_NUM_THREADS);
   }
 
   public void addEthernetInterface(AHardwareInterface<?extends IFrame> eth) {
@@ -79,6 +85,9 @@ public class AccessPoint extends ADevice<IFrame> {
   }
 
   public void run() {
+    for (AHardwareInterface<? extends IFrame> iface: interfaces.values()) {
+      executor.execute(iface);
+    }
     while (deviceIsOn) {
       process();
     }

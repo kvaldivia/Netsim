@@ -1,7 +1,6 @@
 package org.netsim.networking.hardware;
 
 import org.netsim.networking.protocol.IFrame;
-import org.netsim.networking.protocol.ILink;
 
 import dagger.Module;
 import dagger.Provides;

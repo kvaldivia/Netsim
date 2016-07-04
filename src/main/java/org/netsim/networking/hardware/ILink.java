@@ -1,8 +1,8 @@
-package org.netsim.networking.protocol;
+package org.netsim.networking.hardware;
 
 import java.util.ArrayList;
 
-import org.netsim.networking.hardware.AHardwareInterface;
+import org.netsim.networking.protocol.IFrame;
 
 public interface ILink <HW extends AHardwareInterface<?extends IFrame>>{
 

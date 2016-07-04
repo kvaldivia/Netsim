@@ -2,28 +2,46 @@ package netsim;
 
 import java.util.ArrayList;
 
-import org.netsim.networking.DaggerNetworkingComponent;
-import org.netsim.networking.DeviceModule;
-import org.netsim.networking.NetworkingComponent;
 import org.netsim.networking.device.ADevice;
 import org.netsim.networking.hardware.AHardwareInterface;
+import org.netsim.networking.protocol.IDataUnit;
 import org.netsim.networking.protocol.IFrame;
+import org.netsim.simulation.DaggerPlaneComponent;
+import org.netsim.simulation.PlaneComponent;
+import org.netsim.simulation.PlaneModule;
+import org.netsim.simulation.node.INode;
+import org.netsim.simulation.plane.IPlane;
 
 import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 
 public class Stepdefs {
 
-  private static NetworkingComponent deviceComponent = 
-    DaggerNetworkingComponent.builder().deviceModule(new DeviceModule()).build();
-  private static ADevice<? extends IFrame> accessPoint;
-  private static AHardwareInterface<? extends IFrame> currentInterface = null;
+  private final int INT_X_BOUND = 100;
+  private final int INT_Y_BOUND = 100;
+
+  private PlaneComponent planeComponent = DaggerPlaneComponent
+    .builder()
+    .planeModule(new PlaneModule(INT_X_BOUND, INT_Y_BOUND))
+    .build();
+
+  private IPlane plane = planeComponent.provideConcretePlane();
+  
+  private ArrayList<INode> nodes;
+  private AHardwareInterface<? extends IFrame> currentInterface;
+  private ADevice<? extends IDataUnit> dev;
   
   @Given("^An access point has at least one wlan interface working\\.$")
   public void an_access_point_has_at_least_one_wlan_interface_working() throws Throwable {
-    accessPoint = deviceComponent.provideAccessPoint();
+    plane.createAccessPoint();
+    nodes = new ArrayList<>(plane.listNodes().values());
     ArrayList<AHardwareInterface<? extends IFrame>> interfaces; 
-    interfaces = accessPoint.listWirelessInterfaces();
+    interfaces = new ArrayList<>();
+
+    for (INode node: nodes) {
+      dev = node.getDevice();
+      interfaces.addAll(dev.listWirelessInterfaces());
+    }
 
     for (AHardwareInterface<? extends IFrame> wlan: interfaces) {
       if (wlan.isUp()) {
@@ -45,7 +63,7 @@ public class Stepdefs {
 
   @Given("^A mobile node gets in the access point's coverage area\\.$")
   public void a_mobile_node_gets_in_the_access_point_s_coverage_area() throws Throwable {
-      // Write code here that turns the phrase above into concrete actions
+
     throw new PendingException();
        
   }

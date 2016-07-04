@@ -1,8 +1,5 @@
 package org.netsim.networking.protocol;
 
-import org.netsim.networking.protocol.IFrame;
-import org.netsim.networking.protocol.IPacket;
-
 public class EthernetFrame implements IFrame {
   private IPacket payload;
   private String destinationMac;

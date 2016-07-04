@@ -9,7 +9,6 @@ import javax.inject.Inject;
 import org.netsim.networking.device.ADevice;
 import org.netsim.networking.protocol.IDataUnit;
 import org.netsim.networking.protocol.IFrame;
-import org.netsim.networking.protocol.ILink;
 import org.netsim.networking.protocol.IPacket;
 import org.netsim.networking.protocol.IProtocol;
 import org.netsim.networking.protocol.WlanFrame;
@@ -153,7 +152,7 @@ public class WlanInterface extends AHardwareInterface<WlanFrame> {
     WlanFrame frame = dequeueOutgoing();
     if (frame == null)
       return;
-    //wlanLink.transmit(fw);
+    wlanLink.transmit(frame, this);
   }
 
   public WlanFrame wrap(IPacket payload, String source, String dest, String prot) {
@@ -205,6 +204,11 @@ public class WlanInterface extends AHardwareInterface<WlanFrame> {
     if (wlanLink == null) {
       wlanLink = (WirelessLink) link;
     }
+  }
+
+  @Override
+  public ILink<? extends AHardwareInterface<WlanFrame>> getLink() {
+    return wlanLink;
   }
 
   @Override

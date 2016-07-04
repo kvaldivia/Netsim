@@ -7,7 +7,6 @@ import javax.inject.Inject;
 import org.apache.commons.collections4.list.FixedSizeList;
 import org.netsim.networking.protocol.EthernetFrame;
 import org.netsim.networking.protocol.IFrame;
-import org.netsim.networking.protocol.ILink;
 
 public class WiredLink implements ILink<EthernetInterface> {
   private FixedSizeList<EthernetInterface> hosts;

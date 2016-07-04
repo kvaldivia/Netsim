@@ -6,7 +6,6 @@ import javax.inject.Inject;
 
 import org.apache.commons.collections4.list.FixedSizeList;
 import org.netsim.networking.protocol.IFrame;
-import org.netsim.networking.protocol.ILink;
 import org.netsim.networking.protocol.WlanFrame;
 
 public class WirelessLink implements ILink<WlanInterface> {

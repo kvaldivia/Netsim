@@ -1,4 +1,4 @@
-package org.netsim.simulation;
+package org.netsim.simulation.node;
 
 import java.awt.Point;
 import java.util.Random;

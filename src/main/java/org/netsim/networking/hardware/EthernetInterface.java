@@ -10,7 +10,6 @@ import org.netsim.networking.device.ADevice;
 import org.netsim.networking.protocol.EthernetFrame;
 import org.netsim.networking.protocol.IDataUnit;
 import org.netsim.networking.protocol.IFrame;
-import org.netsim.networking.protocol.ILink;
 import org.netsim.networking.protocol.IPacket;
 import org.netsim.networking.protocol.IProtocol;
 
@@ -124,8 +123,11 @@ public class EthernetInterface extends AHardwareInterface<EthernetFrame> {
 
   private void forward() {
     EthernetFrame msg = dequeueOutgoing();
-    msg.toString();
-    //link.transmit(msg);
+    try {
+      wiredLink.transmit(msg, this);
+    } catch (Exception exception) {
+      System.out.println(exception.getMessage());
+    }
   }
 
   private IProtocol<?extends IDataUnit,IPacket> getConsumer(String address) {
@@ -206,5 +208,10 @@ public class EthernetInterface extends AHardwareInterface<EthernetFrame> {
     if (wiredLink != null && wiredLink.isLinkFull())
       result = true;
     return result;
+  }
+
+  @Override
+  public ILink<? extends AHardwareInterface<EthernetFrame>> getLink() {
+    return wiredLink;
   }
 }
