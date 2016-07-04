@@ -8,7 +8,7 @@ import org.netsim.networking.protocol.IFrame;
 
 import dagger.Component;
 
-@Component(modules = {DeviceModule.class, HardwareInterfaceModule.class, NetworkModule.class})
+@Component(modules = {DeviceModule.class, HardwareInterfaceModule.class})
 public interface NetworkingComponent {
   @Named("ethernet")
   AHardwareInterface<? extends IFrame> provideEthernetInterface();
@@ -17,6 +17,4 @@ public interface NetworkingComponent {
   AHardwareInterface<? extends IFrame> provideWlanInterface();
 
   ADevice<? extends IFrame> provideAccessPoint();
-
-  Network provideNetwork();
 }
