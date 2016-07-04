@@ -1,12 +1,21 @@
-package org.netsim.networking;
+package org.netsim.networking.hardware;
 
 import java.util.ArrayList;
+
+import org.netsim.networking.device.ADevice;
+import org.netsim.networking.protocol.IDataUnit;
+import org.netsim.networking.protocol.IFrame;
+import org.netsim.networking.protocol.ILink;
+import org.netsim.networking.protocol.IPacket;
+import org.netsim.networking.protocol.IProtocol;
 
 public abstract class AHardwareInterface<T2 extends IFrame> 
   implements IProtocol<IPacket,T2>, Runnable {
 
-  public final int MAX_HOSTS = 0;
-  
+  public final double DOUBLE_COVERAGE_DISTANCE = 0; 
+
+  public final int INT_MAX_HOSTS = 0;
+
   public abstract String getAddress();
 
   public abstract void addConsumer(IProtocol<? extends IDataUnit,IPacket> consumer);

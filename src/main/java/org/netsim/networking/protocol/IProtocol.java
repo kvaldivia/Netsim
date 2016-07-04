@@ -1,6 +1,5 @@
-package org.netsim.networking;
+package org.netsim.networking.protocol;
 
-import java.lang.Thread;
 import java.util.ArrayList;
 
 /* This class defines the behavior for all the protocols in netsim.

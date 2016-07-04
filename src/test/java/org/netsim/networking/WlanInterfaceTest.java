@@ -1,12 +1,15 @@
 package org.netsim.networking;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 
-import org.junit.Test;
 import org.junit.Before;
+import org.junit.Test;
+import org.netsim.networking.hardware.WlanInterface;
+import org.netsim.networking.protocol.IPacket;
+import org.netsim.networking.protocol.Internet;
+import org.netsim.networking.protocol.IpPacket;
+import org.netsim.networking.protocol.WlanFrame;
 
 public class WlanInterfaceTest {
     private IPacket packet;

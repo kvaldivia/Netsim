@@ -4,9 +4,12 @@ import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.netsim.networking.device.ADevice;
+import org.netsim.networking.hardware.AHardwareInterface;
+import org.netsim.networking.protocol.IFrame;
 
 public class AccessPointTest {
-  private AccessPoint ap;
+  private ADevice<? extends IFrame> ap;
   private NetworkingComponent networkingComponent;
   private ArrayList<AHardwareInterface<? extends IFrame>> interfaces;
 

@@ -1,4 +1,4 @@
-package org.netsim.networking; 
+package org.netsim.networking.protocol; 
 import java.util.ArrayList;
 
 public class Internet implements IProtocol<Message,IPacket> {

@@ -5,7 +5,12 @@ import java.util.HashMap;
 
 import javax.inject.Inject;
 
-public class Network {
+import org.netsim.networking.device.ADevice;
+import org.netsim.networking.device.AccessPoint;
+import org.netsim.networking.protocol.IDataUnit;
+import org.netsim.networking.protocol.IFrame;
+
+public class Network implements INetwork {
   private HashMap<String, ADevice<? extends IDataUnit>> nodes;
   private int apCounter;
   private int mobCounter;
@@ -19,12 +24,14 @@ public class Network {
     mobCounter = 0;
   }
 
+  @Override
   public void addAccessPoint(ADevice<? extends IFrame> ap) {
     String name = STR_ACCESSPOINT_PREFFIX + apCounter;
     apCounter++;
     addNode(name, ap);
   }
 
+  @Override
   public void addMobileNode(AccessPoint mob) {
     String name = STR_MOBILENODE_PREFFIX + mobCounter;
     mobCounter++;

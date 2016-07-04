@@ -1,4 +1,4 @@
-package org.netsim.networking;
+package org.netsim.networking.protocol;
 
 public interface IFrame extends IDataUnit {
   public String getSourceAddress();

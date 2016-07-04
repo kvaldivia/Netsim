@@ -1,10 +1,18 @@
-package org.netsim.networking;
+package org.netsim.networking.hardware;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
 import javax.inject.Inject;
+
+import org.netsim.networking.device.ADevice;
+import org.netsim.networking.protocol.EthernetFrame;
+import org.netsim.networking.protocol.IDataUnit;
+import org.netsim.networking.protocol.IFrame;
+import org.netsim.networking.protocol.ILink;
+import org.netsim.networking.protocol.IPacket;
+import org.netsim.networking.protocol.IProtocol;
 
 public class EthernetInterface extends AHardwareInterface<EthernetFrame> {
   private String address;
@@ -16,7 +24,8 @@ public class EthernetInterface extends AHardwareInterface<EthernetFrame> {
   private WiredLink wiredLink;
   private Thread thread;
 
-  public final int MAX_HOSTS = 2;
+  public final double DOUBLE_COVERAGE_DISTANCE = 0;
+  public final double INT_MAX_HOSTS = 2;
 
   @Inject
   public EthernetInterface() {
@@ -198,5 +207,4 @@ public class EthernetInterface extends AHardwareInterface<EthernetFrame> {
       result = true;
     return result;
   }
-
 }

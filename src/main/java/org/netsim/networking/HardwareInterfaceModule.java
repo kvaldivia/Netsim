@@ -1,17 +1,26 @@
 package org.netsim.networking;
 
+import javax.inject.Named;
+
+import org.netsim.networking.hardware.AHardwareInterface;
+import org.netsim.networking.hardware.EthernetInterface;
+import org.netsim.networking.hardware.WlanInterface;
+import org.netsim.networking.protocol.IFrame;
+
 import dagger.Module;
 import dagger.Provides;
 
 @Module
 public class HardwareInterfaceModule {
   @Provides
-  EthernetInterface provideEthernetInterface() {
-    return new EthernetInterface();
+  @Named("ethernet")
+  AHardwareInterface<? extends IFrame> provideEthernetInterface(EthernetInterface eface) {
+    return eface;
   }
 
   @Provides
-  WlanInterface provideWlanInterface() {
-    return new WlanInterface();
+  @Named("wireless")
+  AHardwareInterface<? extends IFrame> provideWlanInterface(WlanInterface wface) {
+    return wface;
   }
 }

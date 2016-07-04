@@ -1,4 +1,4 @@
-package org.netsim.networking;
+package org.netsim.networking.device;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -7,11 +7,16 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.netsim.networking.hardware.AHardwareInterface;
+import org.netsim.networking.protocol.IDataUnit;
+import org.netsim.networking.protocol.IFrame;
+import org.netsim.networking.protocol.IProtocol;
+
 // TODO: The access point doesn't need to know about the content of the
 // IFrame to send it out. The nature of the radio waves makes the WirelessLink
 // object implement a broadcast mechanism.
 public class AccessPoint extends ADevice<IFrame> {
-  private LinkedHashMap<String,AHardwareInterface<?extends IFrame>> interfaces;
+  private LinkedHashMap<String,AHardwareInterface<? extends IFrame>> interfaces;
   private LinkedList<IFrame> outgoingQueue;
 
   private int wlanCounter;

@@ -1,4 +1,4 @@
-package org.netsim.networking;
+package org.netsim.networking.protocol;
 
 public class WlanFrame implements IFrame {
   private String destinationMac;

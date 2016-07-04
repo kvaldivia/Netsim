@@ -1,14 +1,22 @@
 package org.netsim.networking;
 
+import javax.inject.Named;
+
+import org.netsim.networking.device.ADevice;
+import org.netsim.networking.hardware.AHardwareInterface;
+import org.netsim.networking.protocol.IFrame;
+
 import dagger.Component;
 
 @Component(modules = {DeviceModule.class, HardwareInterfaceModule.class, NetworkModule.class})
 public interface NetworkingComponent {
-  EthernetInterface provideEthernetInterface();
+  @Named("ethernet")
+  AHardwareInterface<? extends IFrame> provideEthernetInterface();
 
-  WlanInterface provideWlanInterface();
+  @Named("wireless")
+  AHardwareInterface<? extends IFrame> provideWlanInterface();
 
-  AccessPoint provideAccessPoint();
+  ADevice<? extends IFrame> provideAccessPoint();
 
   Network provideNetwork();
 }

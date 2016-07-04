@@ -1,6 +1,4 @@
-package org.netsim.networking;
-
-import java.util.Random;
+package org.netsim.networking.hardware;
 
 public class MacAddressGenerator {
   private static MacAddressGenerator instance = new MacAddressGenerator();

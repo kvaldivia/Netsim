@@ -1,22 +1,22 @@
 package netsim;
 
-import cucumber.api.java.en.Given;
-import cucumber.api.PendingException;
-
 import java.util.ArrayList;
 
-import org.netsim.networking.NetworkingComponent;
-import org.netsim.networking.DeviceModule;
-import org.netsim.networking.ADevice;
-import org.netsim.networking.AHardwareInterface;
-import org.netsim.networking.IFrame;
 import org.netsim.networking.DaggerNetworkingComponent;
+import org.netsim.networking.DeviceModule;
+import org.netsim.networking.NetworkingComponent;
+import org.netsim.networking.device.ADevice;
+import org.netsim.networking.hardware.AHardwareInterface;
+import org.netsim.networking.protocol.IFrame;
+
+import cucumber.api.PendingException;
+import cucumber.api.java.en.Given;
 
 public class Stepdefs {
 
   private static NetworkingComponent deviceComponent = 
     DaggerNetworkingComponent.builder().deviceModule(new DeviceModule()).build();
-  private static ADevice<IFrame> accessPoint;
+  private static ADevice<? extends IFrame> accessPoint;
   private static AHardwareInterface<? extends IFrame> currentInterface = null;
   
   @Given("^An access point has at least one wlan interface working\\.$")

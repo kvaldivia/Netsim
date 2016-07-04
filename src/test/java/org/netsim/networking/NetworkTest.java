@@ -1,9 +1,11 @@
 package org.netsim.networking;
 
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.assertTrue;
+import org.netsim.networking.device.ADevice;
+import org.netsim.networking.protocol.IFrame;
 
 public class NetworkTest {
   private Network nw;

@@ -1,8 +1,8 @@
-package org.netsim.networking;
+package org.netsim.networking.protocol;
 
-public interface IDataUnit {
+public interface IPacket extends IDataUnit {
   public IDataUnit getPayload();
-  
+
   public String getSourceAddress();
 
   public String getDestinationAddress();

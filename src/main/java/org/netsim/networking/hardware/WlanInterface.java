@@ -1,4 +1,4 @@
-package org.netsim.networking;
+package org.netsim.networking.hardware;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,11 +6,18 @@ import java.util.LinkedList;
 
 import javax.inject.Inject;
 
+import org.netsim.networking.device.ADevice;
+import org.netsim.networking.protocol.IDataUnit;
+import org.netsim.networking.protocol.IFrame;
+import org.netsim.networking.protocol.ILink;
+import org.netsim.networking.protocol.IPacket;
+import org.netsim.networking.protocol.IProtocol;
+import org.netsim.networking.protocol.WlanFrame;
+
 public class WlanInterface extends AHardwareInterface<WlanFrame> {
   private String address;
   private String gatewayAddress;
   private boolean up;
-  public final int MAX_HOSTS = 10;
 
   private HashMap<String,IProtocol<? extends IDataUnit,IPacket>> consumers;
   private LinkedList<WlanFrame> incoming;
@@ -19,8 +26,26 @@ public class WlanInterface extends AHardwareInterface<WlanFrame> {
   private Thread thread;
   private WirelessLink wlanLink;
 
+  public final double DOUBLE_COVERAGE_DISTANCE;
+  public final int INT_MAX_HOSTS;
+
   @Inject
   public WlanInterface() {
+    DOUBLE_COVERAGE_DISTANCE = 300;
+    INT_MAX_HOSTS = 30;
+    address = MacAddressGenerator.getInstance().newMacAddress();
+    consumers = new HashMap<>();
+    incoming = new LinkedList<>();
+    device = null;
+    thread = null;
+    gatewayAddress = null;
+    wlanLink = null;
+    up = true;
+  }
+
+  public WlanInterface(int coverage, int hosts) {
+    DOUBLE_COVERAGE_DISTANCE = coverage;
+    INT_MAX_HOSTS = hosts;
     address = MacAddressGenerator.getInstance().newMacAddress();
     consumers = new HashMap<>();
     incoming = new LinkedList<>();
