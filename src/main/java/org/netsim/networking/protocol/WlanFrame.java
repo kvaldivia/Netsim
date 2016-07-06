@@ -4,16 +4,14 @@ public class WlanFrame implements IFrame {
   private String destinationMac;
   private String sourceMac;
   private String gatewayAddress;
-  private String protocol;
-  private IPacket payload;
+  private IMacFrame payload;
   private String frameCheckSequence;
 
-  public WlanFrame(IPacket pl, String srcMac, String destMac, String gateway, String prot) {
+  public WlanFrame(IMacFrame pl, String srcMac, String destMac, String gateway) {
     sourceMac = srcMac;
     destinationMac = destMac;
     gatewayAddress = gateway;
     payload = pl;
-    protocol = prot;
   }
 
   public WlanFrame() {
@@ -28,16 +26,12 @@ public class WlanFrame implements IFrame {
     return destinationMac;
   }
 
-  public IPacket getPayload() {
+  public IMacFrame getPayload() {
     return payload;
   }
   
   public String getGatewayAddress() {
     return gatewayAddress;
-  }
-
-  public String getProtocol() {
-    return protocol;
   }
 
   public String getFcs() {

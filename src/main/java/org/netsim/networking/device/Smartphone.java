@@ -2,30 +2,26 @@ package org.netsim.networking.device;
 
 import java.util.ArrayList;
 
-import org.netsim.networking.hardware.EthernetInterface;
 import org.netsim.networking.hardware.IHardwareInterface;
-import org.netsim.networking.hardware.WlanInterface;
-import org.netsim.networking.protocol.IDataUnit;
-import org.netsim.networking.protocol.IFrame;
 import org.netsim.networking.protocol.IMessage;
-import org.netsim.networking.protocol.IProtocol;
+import org.netsim.networking.protocol.IProtocolStack;
 
 public class Smartphone implements IConsumerDevice {
 
   @Override
-  public ArrayList<IHardwareInterface<? extends IFrame>> listConnected() {
+  public ArrayList<IHardwareInterface> listConnected() {
     // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  public ArrayList<IHardwareInterface<? extends IFrame>> listInterfaces() {
+  public ArrayList<IHardwareInterface> listInterfaces() {
     // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  public ArrayList<IHardwareInterface<? extends IFrame>> listWirelessInterfaces() {
+  public ArrayList<IHardwareInterface> listWirelessInterfaces() {
     // TODO Auto-generated method stub
     return null;
   }
@@ -43,25 +39,37 @@ public class Smartphone implements IConsumerDevice {
   }
 
   @Override
-  public void addEthernetInterface(EthernetInterface eth) {
+  public void addProtocolStack() {
     // TODO Auto-generated method stub
 
   }
 
   @Override
-  public void addWlanInterface(WlanInterface wlan) {
+  public void receiveMessage(IMessage msg, String from) {
     // TODO Auto-generated method stub
 
   }
 
   @Override
-  public <T1 extends IMessage> void receiveMessage(T1 msg, IProtocol<? extends IDataUnit, T1> thr) {
+  public void sendMessage(IMessage msg, String from) {
     // TODO Auto-generated method stub
 
   }
 
   @Override
-  public <T1 extends IMessage> void sendMessage(T1 msg, IProtocol<? extends IDataUnit, T1> thr) {
+  public void addEthernetInterface(IHardwareInterface eth) {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public void addWlanInterface(IHardwareInterface wlan) {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public void setProtocolStack(IProtocolStack stack) {
     // TODO Auto-generated method stub
 
   }

@@ -11,29 +11,26 @@ import java.util.ArrayList;
  */
 
 public interface IProtocol<T1 extends IDataUnit,T2 extends IDataUnit> extends Runnable {
-  public T2 wrap(T1 payload, String dest, String consumer);
+  T2 wrap(T1 payload, String dest, String consumer);
 
-  public T2 wrap(T1 payload, String source, String dest, String consumer);
+  T2 wrap(T1 payload, String source, String dest, String consumer);
 
-  public T1 unwrap(T2 pdu);
+  String getAddress();
 
-  public String getAddress();
+  void addConsumer(IProtocol<? extends IDataUnit,T1> consumer);
 
-  public void addConsumer(IProtocol<? extends IDataUnit,T1> consumer);
+  void addSource(IProtocol<T2,? extends IDataUnit> source);
 
-  public void addSource(IProtocol<T2,? extends IDataUnit> source);
+  void send(T1 payload, String dest, String consumer);
 
-  public void send(T1 payload, String dest, String consumer);
+  ArrayList<IProtocol<? extends IDataUnit,T1>> listConsumers();
 
-  public void send(T1 payload, String source, String dest, String consumer);
+  ArrayList<IProtocol<T2,? extends IDataUnit>> listSources();
 
-  public void receive(T2 message, IProtocol<T2,? extends IDataUnit> source);
+  void setThread(Thread t);
 
-  public ArrayList<IProtocol<? extends IDataUnit,T1>> listConsumers();
+  void run();
 
-  public ArrayList<IProtocol<T2,? extends IDataUnit>> listSources();
+  void receive(T2 msg, String through);
 
-  public void setThread(Thread t);
-
-  public void run();
 }

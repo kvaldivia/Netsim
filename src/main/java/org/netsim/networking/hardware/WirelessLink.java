@@ -31,13 +31,12 @@ public class WirelessLink implements ILink<WlanInterface> {
   }
 
   @Override
-  public <D extends IFrame> 
-  void transmit(D frame, WlanInterface src) {
+  public void transmit(IFrame frame, WlanInterface src) {
     for (WlanInterface host: hosts) {
       if (host == src) {
         continue;
       } else {
-        host.receive((WlanFrame) frame, null);
+        host.receive((WlanFrame) frame);
       }
     }
   }
@@ -56,4 +55,8 @@ public class WirelessLink implements ILink<WlanInterface> {
     return hosts.isFull();
   }
 
+  @Override
+  public String getGatewayAddress() {
+    return gateway.getAddress();
+  }
 }

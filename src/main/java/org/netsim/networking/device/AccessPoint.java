@@ -2,7 +2,6 @@ package org.netsim.networking.device;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,16 +11,14 @@ import javax.inject.Inject;
 import org.netsim.networking.hardware.EthernetInterface;
 import org.netsim.networking.hardware.IHardwareInterface;
 import org.netsim.networking.hardware.WlanInterface;
-import org.netsim.networking.protocol.IDataUnit;
-import org.netsim.networking.protocol.IFrame;
-import org.netsim.networking.protocol.IProtocol;
+import org.netsim.networking.protocol.IProtocolStack;
 
 // TODO: The access point doesn't need to know about the content of the
 // IFrame to send it out. The nature of the radio waves makes the WirelessLink
 // object implement a broadcast mechanism.
-public class AccessPoint implements IDevice<IFrame> {
-  private LinkedHashMap<String,IHardwareInterface<? extends IFrame>> interfaces;
-  private LinkedList<IFrame> outgoingQueue;
+public class AccessPoint implements IDevice {
+  private LinkedHashMap<String,IHardwareInterface> interfaces;
+  private IProtocolStack protocolStack;
 
   private int wlanCounter;
   private int ethCounter;
@@ -33,7 +30,7 @@ public class AccessPoint implements IDevice<IFrame> {
   private ExecutorService executor;
 
   @Inject
-  public AccessPoint() {
+  public AccessPoint(IProtocolStack stack) {
     wlanCounter = 0;
     ethCounter = 0;
     deviceIsOn = true;
@@ -41,111 +38,80 @@ public class AccessPoint implements IDevice<IFrame> {
     wlanCounter = 0;
     ethCounter = 0;
     interfaces = new LinkedHashMap<>(2);
-    outgoingQueue = new LinkedList<>();
     executor  = Executors.newFixedThreadPool(INT_NUM_THREADS);
+    protocolStack = stack;
+  }
+
+  public void setProtocolStack(IProtocolStack stack) {
+    protocolStack = stack;
   }
 
   @Override
-  public void addEthernetInterface(EthernetInterface eth) {
-    String id = "eth" + ethCounter;
-    this.interfaces.put(id, eth);
-    eth.setDevice(this);
-    ethCounter++;
-  }
-
-  @Override
-  public void addWlanInterface(WlanInterface wlan) {
-    String id = "wlan" + wlanCounter;
-    this.interfaces.put(id, wlan);
-    wlan.setDevice(this);
-    wlanCounter++;
-  }
-
-  private IFrame dequeueOutgoing() {
-    synchronized (outgoingQueue) {
-      try {
-        return outgoingQueue.getLast();
-      } catch (Exception exception) {
-        System.out.println(exception.getMessage());
-      } 
-      return null;
-    }
-  }
-
-  public void process() {
-    IFrame msg = dequeueOutgoing();
-    if (msg == null) {
-      return;
-    }
-
-    String src = msg.getSourceAddress();
-    String dest = msg.getDestinationAddress();
-    String prot = msg.getProtocol();
-
-    for (IHardwareInterface<? extends IFrame> hwInterface
-         : interfaces.values()) {
-      hwInterface.send(msg.getPayload(), src, dest, prot);
-    } 
-  }
-
-  public void run() {
-    for (IHardwareInterface<? extends IFrame> iface: interfaces.values()) {
-      executor.execute(iface);
-    }
-    while (deviceIsOn) {
-      process();
-    }
-  }
-
-  public void setThread(Thread t) {
-    if (thread == null)
-      thread = t;
-  }
-
-  public <T1 extends IFrame> 
-    void receiveMessage(T1 msg, IProtocol<? extends IDataUnit, T1> thr) {
-
-    synchronized(outgoingQueue) {
-      outgoingQueue.addLast(msg);
-    }
-  }
-
-  public <T1 extends IFrame> 
-    void sendMessage(T1 msg, IProtocol<? extends IDataUnit, T1> thr) {
-    return;
-  }
-
-  @Override
-  public ArrayList<IHardwareInterface<? extends IFrame>> listInterfaces() {
-    ArrayList<IHardwareInterface<? extends IFrame>> result;
+  public ArrayList<IHardwareInterface> listInterfaces() {
+    ArrayList<IHardwareInterface> result;
     result = new ArrayList<>(interfaces.values());
     return result;
   }
 
   @Override
-  public ArrayList<IHardwareInterface<? extends IFrame>> listConnected() {
-    ArrayList<IHardwareInterface<? extends IFrame>> connected;
+  public ArrayList<IHardwareInterface> listConnected() {
+    ArrayList<IHardwareInterface> connected;
     connected = new ArrayList<>();
-    for (IHardwareInterface<? extends IFrame> iface: interfaces.values()) {
+    for (IHardwareInterface iface: interfaces.values()) {
       connected.addAll(iface.getConnectedHosts());
     }
     return connected;
   }
 
   @Override
-  public ArrayList<IHardwareInterface<? extends IFrame>> 
+  public ArrayList<IHardwareInterface> 
   listWirelessInterfaces() {
-    ArrayList<IHardwareInterface<? extends IFrame>> wlanList 
+    ArrayList<IHardwareInterface> wlanList 
       = new ArrayList<>();
 
-    for (Map.Entry<String,IHardwareInterface<? extends IFrame>> wlan
-         : interfaces.entrySet()) {
+    for (Map.Entry<String,IHardwareInterface> wlan: interfaces.entrySet()) {
 
       if (wlan.getKey().contains("wlan")) {
         wlanList.add(wlan.getValue());
       }
     }
     return wlanList;
+  }
+
+  @Override
+  public void addProtocolStack() {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public void process() {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public void run() {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public void addEthernetInterface(IHardwareInterface eth) {
+    String id = "eth" + ethCounter;
+    this.interfaces.put(id, eth);
+    protocolStack.addInterface(eth);
+    ethCounter++;
+  }
+
+  @Override
+  public void addWlanInterface(IHardwareInterface wlan) {
+    String id = "wlan" + wlanCounter;
+    this.interfaces.put(id, wlan);
+    wlan.setDevice(this);
+    protocolStack.addInterface(wlan);
+    wlanCounter++;
+
   }
 
 }

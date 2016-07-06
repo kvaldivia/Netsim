@@ -5,9 +5,7 @@ public interface IFrame extends IDataUnit {
 
   public String getDestinationAddress();
 
-  public IPacket getPayload();
+  public IMacFrame getPayload();
 
   public String getFcs();
-
-  public String getProtocol();
 }

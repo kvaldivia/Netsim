@@ -1,17 +1,18 @@
 package org.netsim.networking.protocol;
 
+import javax.inject.Inject;
+
 public class EthernetFrame implements IFrame {
-  private IPacket payload;
+  private IMacFrame payload;
   private String destinationMac;
   private String sourceMac;
-  private String protocol;
   private String frameCheckSequence;
 
-  public EthernetFrame(IPacket pl, String srcMac, String destMac, String prot) {
+  @Inject
+  public EthernetFrame(IMacFrame pl, String srcMac, String destMac) {
     sourceMac = srcMac;
     destinationMac = destMac;
     payload = pl;
-    protocol = prot;
   }
 
   public EthernetFrame() {
@@ -26,7 +27,7 @@ public class EthernetFrame implements IFrame {
     return this.destinationMac;
   }
 
-  public IPacket getPayload() {
+  public IMacFrame getPayload() {
     return this.payload;
   }
 
@@ -34,7 +35,4 @@ public class EthernetFrame implements IFrame {
     return this.frameCheckSequence;
   }
 
-  public String getProtocol() {
-    return protocol;
-  }
 }

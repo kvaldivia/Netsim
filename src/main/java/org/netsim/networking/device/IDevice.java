@@ -2,31 +2,26 @@ package org.netsim.networking.device;
 
 import java.util.ArrayList;
 
-import org.netsim.networking.hardware.EthernetInterface;
 import org.netsim.networking.hardware.IHardwareInterface;
-import org.netsim.networking.hardware.WlanInterface;
-import org.netsim.networking.protocol.IDataUnit;
-import org.netsim.networking.protocol.IFrame;
-import org.netsim.networking.protocol.IProtocol;
+import org.netsim.networking.protocol.IProtocolStack;
 
-public interface IDevice<T extends IDataUnit> extends Runnable{
-  public <T1 extends T>
-    void receiveMessage(T1 msg, IProtocol<? extends IDataUnit,T1> thr);
-  
-  public <T1 extends T>
-    void sendMessage(T1 msg, IProtocol<? extends IDataUnit, T1> thr);
+public interface IDevice extends Runnable{
 
-  public ArrayList<IHardwareInterface<?extends IFrame>> listInterfaces();
+  public ArrayList<IHardwareInterface> listInterfaces();
 
-  public ArrayList<IHardwareInterface<?extends IFrame>> listWirelessInterfaces();
+  public ArrayList<IHardwareInterface> listWirelessInterfaces();
 
-  public ArrayList<IHardwareInterface<?extends IFrame>> listConnected();
+  public ArrayList<IHardwareInterface> listConnected();
 
   public void process();
 
   public void run();
 
-  public void addEthernetInterface(EthernetInterface eth);
+  public void addEthernetInterface(IHardwareInterface eth);
   
-  public void addWlanInterface(WlanInterface wlan);
+  public void addWlanInterface(IHardwareInterface wlan);
+
+  public void addProtocolStack();
+
+  void setProtocolStack(IProtocolStack stack);
 }

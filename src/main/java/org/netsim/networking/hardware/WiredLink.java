@@ -26,13 +26,12 @@ public class WiredLink implements ILink<EthernetInterface> {
   }
 
   @Override
-  public <D extends IFrame> 
-  void transmit(D frame, EthernetInterface src) {
+  public void transmit(IFrame frame, EthernetInterface src) {
     for (EthernetInterface host: hosts) {
       if (host == src) {
         continue;
       } else {
-        host.receive((EthernetFrame) frame, null);
+        host.receive((EthernetFrame)frame);
       }
       
     }
@@ -50,6 +49,11 @@ public class WiredLink implements ILink<EthernetInterface> {
   @Override
   public boolean isLinkFull() {
     return this.hosts.isFull();
+  }
+
+  @Override
+  public String getGatewayAddress() {
+    return null;
   }
 
 }

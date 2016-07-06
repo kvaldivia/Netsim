@@ -3,31 +3,48 @@ package org.netsim.networking;
 import javax.inject.Named;
 
 import org.netsim.networking.device.AccessPoint;
-import org.netsim.networking.hardware.IHardwareInterface;
-import org.netsim.networking.hardware.ILink;
-import org.netsim.networking.protocol.IFrame;
+import org.netsim.networking.hardware.EthernetInterface;
+import org.netsim.networking.hardware.WiredLink;
+import org.netsim.networking.hardware.WirelessLink;
+import org.netsim.networking.hardware.WlanInterface;
+import org.netsim.networking.protocol.ConsumerMacProtocol;
+import org.netsim.networking.protocol.ForwardMacProtocol;
+import org.netsim.networking.protocol.IProtocolStack;
+import org.netsim.networking.protocol.InternetProtocol;
+import org.netsim.networking.protocol.SwitchMacProtocol;
 
 import dagger.Component;
 
-@Component(modules = {DeviceModule.class, HardwareModule.class})
+@Component(modules = 
+  { 
+     HardwareModule.class, 
+     ProtocolModule.class, 
+     DeviceModule.class,
+  }
+)
 public interface NetworkingComponent {
-  @Named("ethernet")
-  IHardwareInterface<? extends IFrame> provideEthernetInterface();
 
-  @Named("wireless")
-  IHardwareInterface<? extends IFrame> provideWlanInterface();
+  @Named("ethernet")
+  EthernetInterface provideEthernetInterface();
+
+  @Named("wlan")
+  WlanInterface provideWlanInterface();
 
   @Named("wired")
-  public ILink<? extends IHardwareInterface<? extends IFrame>> 
-    provideWiredLink();
+  WiredLink provideWiredLink();
 
   @Named("wireless")
-  public ILink<? extends IHardwareInterface<? extends IFrame>> 
-    provideWirelessLink();
+  WirelessLink provideWirelessLink();
 
-  @Named("ap")
-  AccessPoint provideAccessPoint();
+  ConsumerMacProtocol provideConsumerMac();
 
+  ForwardMacProtocol provideForwardMac();
+
+  SwitchMacProtocol provideSwitchMac();
+
+  InternetProtocol provideInternet();
+
+  IProtocolStack provideSecondLayer();
 
   AccessPoint ap();
 }

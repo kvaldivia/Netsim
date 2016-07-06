@@ -6,9 +6,9 @@ uml/
 *.swp
 config/
 .classpath
-.project
-.settings/
 bin/
 *.iml
 .idea/
 dagger/
+.settings/
+.project

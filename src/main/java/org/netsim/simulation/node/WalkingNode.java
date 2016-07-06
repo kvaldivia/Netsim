@@ -7,20 +7,18 @@ import javax.inject.Inject;
 
 import org.netsim.networking.device.IDevice;
 import org.netsim.networking.hardware.IHardwareInterface;
-import org.netsim.networking.protocol.IDataUnit;
-import org.netsim.networking.protocol.IFrame;
 
 public class WalkingNode implements INode {
-  private HashMap<IHardwareInterface<? extends IFrame>, Double> coverageDistances;
+  private HashMap<IHardwareInterface, Double> coverageDistances;
   private Point point;
-  private IDevice<? extends IDataUnit> device;
+  private IDevice device;
 
   @Inject
-  public WalkingNode(IDevice<? extends IDataUnit> dev) {
+  public WalkingNode(IDevice dev) {
     device = dev;
     point = null;
     coverageDistances = new HashMap<>();
-    for (IHardwareInterface<? extends IFrame> iface: dev.listInterfaces()) {
+    for (IHardwareInterface iface: dev.listInterfaces()) {
       coverageDistances.put(iface, iface.getCoverageDistance());
     }
   }
@@ -32,7 +30,7 @@ public class WalkingNode implements INode {
   }
 
   @Override
-  public IDevice<? extends IDataUnit> getDevice() {
+  public IDevice getDevice() {
     return device;
   }
 
@@ -47,7 +45,7 @@ public class WalkingNode implements INode {
   }
 
   @Override
-  public HashMap<IHardwareInterface<? extends IFrame>, Double> getCoverageDistances() {
+  public HashMap<IHardwareInterface, Double> getCoverageDistances() {
     // TODO Auto-generated method stub
     return null;
   }
